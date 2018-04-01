@@ -20,6 +20,8 @@
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <RestorePackages>true</RestorePackages>
+    <UseGlobalApplicationHostFile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,8 +41,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GroupDocs.Viewer, Version=3.4.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
-      <HintPath>..\packages\groupdocs-viewer-dotnet.3.4.0\lib\GroupDocs.Viewer.dll</HintPath>
+    <Reference Include="GroupDocs.Viewer">
+      <HintPath>..\packages\GroupDocs.Viewer.17.12.0\lib\GroupDocs.Viewer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
@@ -69,6 +71,7 @@
     <Compile Include="BusinessLayer\GetFileParameters.cs" />
     <Compile Include="BusinessLayer\GetImageUrlsParameters.cs" />
     <Compile Include="BusinessLayer\GetResourceForHtmlParameters.cs" />
+    <Compile Include="BusinessLayer\Helpers\DocumentInfoJsonSerializer.cs" />
     <Compile Include="BusinessLayer\Helpers\ImageUrlHelper.cs" />
     <Compile Include="BusinessLayer\Helpers\InterProcessLock.cs" />
     <Compile Include="BusinessLayer\Helpers\Utils.cs" />
@@ -132,6 +135,7 @@
     <Content Include="Scripts\installableViewer.min.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="packages.config" />
+    <Content Include="App_Data\demo.docx" />
     <None Include="Scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="Scripts\jquery-2.2.0.js" />
     <Content Include="Scripts\jquery-2.2.0.min.js" />
@@ -865,6 +869,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Code\" />
+    <Folder Include="App_Data\temp\" />
     <Folder Include="bin\" />
     <Folder Include="Content\TempStorage\" />
     <Folder Include="Uploads\Temp\" />

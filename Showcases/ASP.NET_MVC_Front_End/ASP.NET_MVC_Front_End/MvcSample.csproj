@@ -42,14 +42,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GroupDocs.Viewer">
-      <HintPath>..\packages\groupdocs-viewer-dotnet.3.1.0\lib\GroupDocs.Viewer.dll</HintPath>
+    <Reference Include="GroupDocs.Viewer, Version=17.12.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\GroupDocs.Viewer.17.12.0\lib\GroupDocs.Viewer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -120,6 +122,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ControllerExtensions.cs" />
+    <Compile Include="Controllers\JsonDataContractActionResult.cs" />
+    <Compile Include="Helpers\DocumentInfoJsonSerializer.cs" />
     <Compile Include="Helpers\FileDataJsonSerializer.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ViewerController.cs" />
@@ -128,17 +133,23 @@
     </Compile>
     <Compile Include="Helpers\ImageUrlHelper.cs" />
     <Compile Include="Helpers\InterProcessLock.cs" />
+    <Compile Include="Helpers\LargeJsonResult.cs" />
+    <Compile Include="Helpers\Locales.cs" />
+    <Compile Include="Helpers\LocalizationHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Models\FileBrowserTreeDataResponse.cs" />
     <Compile Include="Models\GetDocumentPageHtmlParameters.cs" />
+    <Compile Include="Models\GetDocumentPageHtmlResult.cs" />
     <Compile Include="Models\GetDocumentPageImageParameters.cs" />
     <Compile Include="Models\GetFileParameters.cs" />
     <Compile Include="Models\GetImageUrlsParameters.cs" />
     <Compile Include="Models\GetResourceForHtmlParameters.cs" />
+    <Compile Include="Models\HtmlPageContent.cs" />
     <Compile Include="Models\ReorderPageParameters.cs" />
     <Compile Include="Models\RotatePageParameters.cs" />
     <Compile Include="Models\ViewDocumentParameters.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Responses\FailedResponse.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_Data\candy.pdf" />
@@ -159,6 +170,7 @@
     <Content Include="Content\Images\viewer_fading.png" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\GroupdocsViewer.all.js" />
     <Content Include="Scripts\GroupdocsViewer.all.min.js" />
     <Content Include="Scripts\installableViewer.js" />
@@ -200,9 +212,23 @@
     <Content Include="Content\fonts\PT_Sans-Web-Regular.ttf" />
     <Content Include="Content\fonts\PT_Sans-Web-Regular.woff" />
     <None Include="Properties\PublishProfiles\k2.pubxml" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-ar-AE.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-en-US.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-es-ES.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-fr-FR.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-it-IT.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-nb-NO.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-pl-PL.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-pt-PT.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-ru-RU.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-tr-TR.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-zh-CN.json" />
+    <EmbeddedResource Include="Resources\LocalizedStrings-zh-TW.json" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Content\fonts\PT_Sans-Web-Bold.ttf" />
     <Content Include="Content\fonts\PT_Sans-Web-Bold.woff" />
   </ItemGroup>
@@ -235,12 +261,6 @@
     </VisualStudio>
   </ProjectExtensions>
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
-  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

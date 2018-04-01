@@ -27,6 +27,7 @@ namespace MvcSample.Models
         public string PasswordForOpening { get; set; }
         public bool SaveFontsInAllFormats { get; set; }
         public string Callback { get; set; }
+        public bool PrintWithWatermark  { get; set; }
     }
 
     public abstract class WatermarkedDocumentParameters : DocumentParameters
@@ -35,6 +36,7 @@ namespace MvcSample.Models
         public int? WatermarkColor { get; set; }
         public WatermarkPosition? WatermarkPosition { get; set; }
         public float? WatermarkWidth { get; set; }
+        public byte WatermarkOpacity { get; set; }
     }
 
     public abstract class DocumentParameters

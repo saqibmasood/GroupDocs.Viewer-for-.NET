@@ -23,14 +23,13 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
         private static ViewerHtmlHandler _htmlHandler;
         private static ViewerImageHandler _imageHandler;
         private static string _storagePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); // App_Data folder path
-        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\Temp";
+        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\temp";
         private static ViewerConfig _config;
         protected void Page_Load(object sender, EventArgs e)
         {
             _config = new ViewerConfig
             {
-                StoragePath = _storagePath,
-                TempPath = _tempPath,
+                StoragePath = _storagePath, 
                 UseCache = true
             };
 
@@ -50,13 +49,17 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
 
                 var getPdfFileRequest = new PdfFileOptions
                 {
-                    Guid = parameters.Path,
-                    AddPrintAction = parameters.IsPrintable,
+                      
                     Transformations = Transformation.Rotate | Transformation.Reorder,
                     Watermark = GetWatermark(parameters),
                 };
 
-                var pdfFileResponse = _htmlHandler.GetPdfFile(getPdfFileRequest);
+                if (parameters.IsPrintable)
+                {
+                    getPdfFileRequest.Transformations |= Transformation.AddPrintAction;
+                }
+
+                var pdfFileResponse = _htmlHandler.GetPdfFile(parameters.Path, getPdfFileRequest);
                 fileStream = pdfFileResponse.Stream;
             }
             else

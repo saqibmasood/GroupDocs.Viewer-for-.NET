@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
+using GroupDocs.Viewer.Converter.Options;
 using WatermarkPosition = MvcSample.Models.WatermarkPosition;
 
 namespace MvcSample.Helpers
@@ -161,7 +162,7 @@ namespace MvcSample.Helpers
             return filename;
         }
 
-        public static string GetImageMimeTypeFromFilename(string filename)
+        public static string GetMimeType(string filename)
         {
             string fileExtension = Path.GetExtension(filename);
             if (!String.IsNullOrWhiteSpace(fileExtension) && fileExtension.StartsWith("."))
@@ -186,6 +187,27 @@ namespace MvcSample.Helpers
                     break;
             }
             return mimeType;
+        }
+
+        public static string GetMimeType(ConvertImageFileType convertImageFileType)
+        {
+            string contentType;
+            switch (convertImageFileType)
+            {
+                case ConvertImageFileType.JPG:
+                    contentType = "image/jpeg";
+                    break;
+                case ConvertImageFileType.BMP:
+                    contentType = "image/bmp";
+                    break;
+                case ConvertImageFileType.PNG:
+                    contentType = "image/png"; ;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return contentType;
         }
 
         public static HtmlResourceType GetResourceType(string resourceName)
@@ -254,18 +276,30 @@ namespace MvcSample.Helpers
                 .ToList();
         }
 
-        public static Watermark GetWatermark(string watermarkText, int? watermarkColor, WatermarkPosition? watermarkPosition, float? watermarkWidth)
+        public static Watermark GetWatermark(string watermarkText, int? watermarkColor, WatermarkPosition? watermarkPosition, float? watermarkWidth,byte watermarkOpacity)
         {
             if (string.IsNullOrWhiteSpace(watermarkText))
                 return null;
 
+            byte red = 0;
+            byte green = 0;
+            byte blue = 0;
+            byte opacity = 255;
+            if (watermarkColor.HasValue)
+            {
+                 red = Color.FromArgb(watermarkColor.Value).R;
+                 green = Color.FromArgb(watermarkColor.Value).G;
+                 blue = Color.FromArgb(watermarkColor.Value).B;
+                 opacity = watermarkOpacity;
+            }
             return new Watermark(watermarkText)
             {
                 Color = watermarkColor.HasValue
-                    ? Color.FromArgb(watermarkColor.Value)
+                    ? Color.FromArgb(opacity, red, green, blue)
                     : Color.Red,
                 Position = ToWatermarkPosition(watermarkPosition),
-                Width = watermarkWidth
+                Width = watermarkWidth,
+                FontName = "MS Gothic"
             };
         }
 

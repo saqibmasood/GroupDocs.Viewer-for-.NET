@@ -27,15 +27,14 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
     public partial class GetDocumentPageImage : System.Web.UI.Page
     {
         private static string _storagePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); // App_Data folder path
-        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\Temp";
+        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\temp";
         private static ViewerConfig _config;
 
         protected void Page_Load(object sender, EventArgs e)
         {
             _config = new ViewerConfig
             {
-                StoragePath = _storagePath,
-                TempPath = _tempPath,
+                StoragePath = _storagePath, 
                 UseCache = true
             };
 
@@ -73,13 +72,13 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
                 JpegQuality = 100,
                 Watermark = Utils.GetWatermark(parameters.WatermarkText, parameters.WatermarkColor,
                     parameters.WatermarkPosition, parameters.WatermarkWidth),
-                Transformations = parameters.Rotate ? Transformation.Rotate : Transformation.None
+                Transformations = parameters.Rotate ? Transformation.Rotate : Transformation.None,
+                ExtractText=true,
             };
 
             if (parameters.Rotate && parameters.Width.HasValue)
-            {
-                DocumentInfoOptions documentInfoOptions = new DocumentInfoOptions(guid);
-                DocumentInfoContainer documentInfoContainer = imageHandler.GetDocumentInfo(documentInfoOptions);
+            { 
+                DocumentInfoContainer documentInfoContainer = imageHandler.GetDocumentInfo(guid);
 
                 int side = parameters.Width.Value;
 
@@ -131,19 +130,23 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
       
         public object ChangeType(object value, Type conversion)
         {
-            var t = conversion;
-
-            if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            try
             {
-                if (value == null)
+                var t = conversion;
+
+                if (t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
                 {
-                    return null;
+                    if (value == null)
+                    {
+                        return null;
+                    }
+
+                    t = Nullable.GetUnderlyingType(t);
                 }
 
-                t = Nullable.GetUnderlyingType(t);
+                return Convert.ChangeType(value, t);
             }
-
-            return Convert.ChangeType(value, t);
+            catch { return null; }
         }
     }
 }

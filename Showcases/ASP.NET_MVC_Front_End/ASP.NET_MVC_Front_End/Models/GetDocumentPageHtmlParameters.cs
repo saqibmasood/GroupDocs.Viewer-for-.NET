@@ -1,9 +1,8 @@
 ﻿
 namespace MvcSample.Models
 {
-    public class GetDocumentPageHtmlParameters
-    {
-        public string Path { get; set; }
+    public class GetDocumentPageHtmlParameters : WatermarkedDocumentParameters
+    { 
 
         public int PageIndex { get; set; }
 

@@ -22,7 +22,7 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
     {
         private static ViewerConfig _config;
         private static string _storagePath = AppDomain.CurrentDomain.GetData("DataDirectory").ToString(); // App_Data folder path
-        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\Temp";
+        private static string _tempPath = AppDomain.CurrentDomain.GetData("DataDirectory") + "\\temp";
 
         protected void Page_Load(object sender, EventArgs e) 
         {
@@ -44,10 +44,10 @@ namespace GroupDocs.Viewer.WebForm.FrontEnd
 
                 try
                 {
-                var resource = new HtmlResource
+                    var resource = new HtmlResource(parameters.ResourceName)
                 {
-                    ResourceName = parameters.ResourceName,
-                    ResourceType = Utils.GetResourceType(parameters.ResourceName),
+                    //ResourceName = parameters.ResourceName,
+                    //ResourceType = Utils.GetResourceType(parameters.ResourceName),
                     DocumentPageNumber = parameters.PageNumber
                 };
                 var stream = _htmlHandler.GetResource(parameters.DocumentPath, resource);
